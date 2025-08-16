@@ -66,12 +66,10 @@ function getDefaultFilter() {
 }
 
 function getFilterFromSearchParams(searchParams) {
-    const defaultFilter = getDefaultFilter()
-    const filterBy = {}
-    for (const field in defaultFilter) {
-        filterBy[field] = searchParams.get(field) || ''
+    return {
+        txt: searchParams.get('txt') || '',
+        importance: +searchParams.get('importance') || 0
     }
-    return filterBy
 }
 
 

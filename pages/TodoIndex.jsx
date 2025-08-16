@@ -14,16 +14,21 @@ export function TodoIndex() {
 
     // const [todos, setTodos] = useState(null)
     const todos = useSelector(state => state.todos)
+    const isLoading = useSelector(state => state.isLoading)
 
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const defaultFilter = todoService.getFilterFromSearchParams(searchParams)
+    // const defaultFilter = todoService.getFilterFromSearchParams(searchParams)
 
-    const [filterBy, setFilterBy] = useState(defaultFilter)
+    const [filterBy, setFilterBy] = useState(() => 
+        todoService.getFilterFromSearchParams(searchParams))
 
     useEffect(() => {
         setSearchParams(filterBy)
+    }, [filterBy, setSearchParams])
+
+    useEffect(() => {
         loadTodos(filterBy)
     }, [filterBy])
 
@@ -50,7 +55,7 @@ export function TodoIndex() {
             })
     }
 
-    if (!todos) return <div>Loading...</div>
+    if (isLoading) return <div>Loading...</div>
     return (
         <section className="todo-index">
             <TodoFilter filterBy={filterBy} onSetFilterBy={setFilterBy} />
